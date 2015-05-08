@@ -29,16 +29,16 @@ Se sabe que en el hospital los médicos van identificados por su número de cole
 
 ### REGISTRO DE CITA SOLICITADA POR PACIENTE
 
-- PACIENTE SOLICITA CITA
+- **PACIENTE SOLICITA CITA**
     - PACIENTE ======= SOLICITA CITA VIA WEB ======> SISTEMA
     - PACIENTE ==== SOLICITA CITA PERSONALMENTE ===> SISTEMA
 
-- CITA ES ASIGNADA A PACIENTE
+- **CITA ES ASIGNADA A PACIENTE**
     - SISTEMA === ASIGNA CITA ==> PACIENTE
 
 ### PACIENTE ASISTE A CONSULTA
 
-- MEDICO ATIENDE PACIENTE
+- **MEDICO ATIENDE PACIENTE**
     - MEDICO ===== CONSULTA HISTORIAL PACIENTE ====> SISTEMA
     - SISTEMA == RETORNA DATOS+HISTORIAL PACIENTE => MEDICO
     - MEDICO ============== ANALIZA ===============> PACIENTE
@@ -47,3 +47,18 @@ Se sabe que en el hospital los médicos van identificados por su número de cole
     - MEDICO ====== ANOTA DIAGNOSTICO PACIENTE ====> SISTEMA
 
 -
+
+
+======
+CLASES
+======
+
+Paciente
+
+Personal
+    Administrativo
+    Medico
+        General
+        Especialista
+
+Cita_médica
