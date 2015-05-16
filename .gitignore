@@ -56,5 +56,16 @@ docs/_build/
 # PyBuilder
 target/
 
+# Visual Studio Code Settings
 .settings/
+
+# SQLite 3 DB
 *.db
+
+# Node.js modules
+platforms/desktop/src/node_modules
+platforms/mobile/src/node_modeules
+
+# Platform builds
+platforms/desktop/dist
+platforms/mobiles/dist
