@@ -90,7 +90,7 @@ class Especialidad(models.Model):
 
 
 class CitaMedica(models.Model):
-    paciente = models.ForeignKey("PerfilPaciente")
+    historia = models.ForeignKey("HistoriaClinica")
     medico = models.ForeignKey("PerfilMedico")
     horario = models.DateTimeField("Hora de cita")
     asistio = models.BooleanField()
