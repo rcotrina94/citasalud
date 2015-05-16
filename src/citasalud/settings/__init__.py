@@ -37,7 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'localflavor',
     'rest_framework',
+    'citasalud.apps.main',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +54,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'citasalud.urls'
+
+AUTH_PROFILE_MODULE = 'main.PerfilUsuario'
 
 TEMPLATES = [
     {
@@ -84,11 +88,11 @@ DATABASES = {
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
+# https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-PE'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
@@ -98,9 +102,20 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
+# https://docs.djangoproject.com/en/1.7/howto/static-files/
+
+MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
+
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), )
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+
 
 #########################
 # DJANGO REST FRAMEWORK #
