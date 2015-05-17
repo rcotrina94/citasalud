@@ -1,0 +1,13 @@
+{
+  "name": "citasalud.admin",
+  "version": "0.1.0",
+  "description": "(ADMIN) CitaSalud - Gestión de citas y diagnóstico",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "bower update"
+  },
+  "author": "Richard Cotrina <rcotrina@pytel.pe>",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}

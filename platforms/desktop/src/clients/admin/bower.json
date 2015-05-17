@@ -1,0 +1,17 @@
+{
+  "name": "angular-material-starter",
+  "description": "A starter project for AngularJS Material",
+  "version": "0.0.1",
+  "homepage": "https://github.com/angular/material-start",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "master",
+    "angular-animate": "master",
+    "angular-aria": "master",
+    "angular-material": "master"
+  },
+  "devDependencies": {
+    "angular-material": "master"
+  }
+}

@@ -1,0 +1,15 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+  font-size:14px;
+  height:100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+body#login md-input-container.md-icon-float > md-icon {
+  top: 22px;
+}
+
+#login md-input-container.md-icon-float.md-input-focused, md-input-container.md-icon-float.md-input-has-value {
+  margin-top: -16px;
+}

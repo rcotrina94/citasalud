@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" >
+  <head>
+    <title>citaSalud | Iniciar Sesión</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel="stylesheet" href="./assets/components/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="./assets/css/app.css"/>
+  </head>
+
+  <body id="login" ng-app="citaSalud"  ng-controller="mainCtrl">
+    <md-toolbar style="-webkit-app-region: drag">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Iniciar Sesión</span>
+        </h2>
+        <span flex></span>
+        <md-button ng-click="minW()" style="-webkit-app-region: no-drag" class="md-icon-button" aria-label="Minimizar">
+          <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+        </md-button>
+        <md-button ng-click="closeW()" style="-webkit-app-region: no-drag" class="md-icon-button" aria-label="Cerrar">
+          <md-icon md-svg-icon="navigation:ic_close_24px"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content id="internalw" style="padding-top:24px;" layout="column" layout-align="center center">
+      <div layout="column" style="width:60%;">
+        <md-input-container class="md-icon-float">
+          <!-- Use floating label instead of placeholder -->
+          <label>Usuario</label>
+          <md-icon fill="black" md-svg-icon="action:ic_account_box_24px" class="name"></md-icon>
+          <input ng-model="loginData.username" type="text">
+        </md-input-container>
+        <md-input-container class="md-icon-float">
+          <label>Contraseña</label>
+          <md-icon md-svg-icon="action:ic_lock_24px" class="name"></md-icon>
+          <input ng-model="loginData.password" type="password">
+        </md-input-container>
+        <md-input-container>
+          <md-checkbox ng-model="loginData.remember_pwd" aria-label="Recordar contraseña" class="md-primary">
+        Recordarme
+         </md-checkbox>
+         </md-input-container>
+        <md-input-container>
+         <md-button ng-click="doLogin($event)" class="md-raised md-primary">INICIAR SESIÓN</md-button>
+        </md-input-container>
+      </div>
+    </md-content>
+
+    <script src="./assets/components/angular/angular.js"></script>
+    <script src="./assets/components/angular-animate/angular-animate.js"></script>
+    <script src="./assets/components/angular-aria/angular-aria.js"></script>
+    <script src="./assets/components/angular-material/angular-material.js"></script>
+
+    <script src="./assets/js/users/Users.js"></script>
+    <script src="./assets/js/users/UserController.js"></script>
+    <script src="./assets/js/users/UserService.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>
