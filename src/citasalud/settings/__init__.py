@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'localflavor',
     'rest_framework',
+    'rest_framework.authtoken',
     'citasalud.apps.main',
 )
 
@@ -85,6 +86,17 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'citasalud',
+#        'USER': 'root',
+#        'PASSWORD': 'LU7412369',
+#        'HOST': 'dev',
+#        'PORT': '',
+#    }
+#}
 
 
 # Internationalization

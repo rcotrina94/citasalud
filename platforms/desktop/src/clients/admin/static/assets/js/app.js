@@ -1,5 +1,6 @@
- var app = angular.module('citaSalud', ['ngMaterial', 'users'])
- .config(function($mdThemingProvider, $mdIconProvider){
+ var app = angular.module('citaSalud', ['ngMaterial', 'users']);
+ 
+ app.config(function($mdThemingProvider, $mdIconProvider){
 	$mdIconProvider
 		.iconSet("action", "assets/components/svg-material-icons/svg-sprite-action.svg", 24)
 		.iconSet("alert", "assets/components/svg-material-icons/svg-sprite-alert.svg", 24)
@@ -18,59 +19,27 @@
 		.iconSet("toggle", "assets/components/svg-material-icons/svg-sprite-toggle.svg", 24);
 	
 	$mdThemingProvider.theme('default')
-		.primaryPalette('blue')
-    	.accentPalette('blue-grey');
+		.primaryPalette('indigo')
+    	.accentPalette('blue');
 });
 
-app.controller('mainCtrl', function($scope, $mdDialog){
-	
-	var ipc = require('ipc');
-	var messenger = {
-		send : function(event, action) {
-			ipc.send(event, action);
-		}
-	};
-	
-	$scope.loginData = {
-		'username' : 'admin',
-		'password' : 'admin',
-		'remember_pwd' : true
-	};
-	
-	$scope.closeW = function(){
-		messenger.send('window-evt', 'close');
-	};
-	$scope.minW = function(){
-		messenger.send('window-evt', 'minimize');
-		$scope.hide();
-	};
-	
-	$scope.doLogin = function(){
-		$scope.loading();
-	};
-	
-	$scope.loading = function() {
-		var parentEl = angular.element(document.querySelector('#internalw'));
-	    $mdDialog.show({
-		  parent : parentEl,
-	      controller: DialogController,
-	      template: '<md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>',
-	    })
-	    .then(function(answer) {
-	      $scope.alert = 'You said the information was "' + answer + '".';
-	    }, function() {
-	      $scope.alert = 'You cancelled the dialog.';
-	    });
-		
-	};
-	
-	function DialogController(scope, $mdDialog) {
-	    scope.closeDialog = function() {
-	      $mdDialog.hide();
-	    }
-	  }
-		  
-	$scope.hide = function(){
-		$mdDialog.cancel();
+//app.config(['$httpProvider', function ($httpProvider) {
+//    // Intercept POST requests, convert to standard form encoding
+//    $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+//    $httpProvider.defaults.transformRequest.unshift(function (data, headersGetter) {
+//        var key, result = [];
+//        for (key in data) {
+//            if (data.hasOwnProperty(key)) {
+//                result.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+//            }
+//        }
+//        return result.join("&");
+//    });
+//}])
+
+var ipc = require('ipc');
+var messenger = {
+	send : function(event, action) {
+		ipc.send(event, action);
 	}
-});
+};

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./assets/css/app.css"/>
   </head>
 
-  <body id="login" ng-app="citaSalud"  ng-controller="mainCtrl">
+  <body id="login" ng-app="citaSalud"  ng-controller="loginCtrl">
     <md-toolbar style="-webkit-app-region: drag">
       <div class="md-toolbar-tools">
         <h2>
@@ -28,7 +28,7 @@
       </div>
     </md-toolbar>
     <md-content id="internalw" style="padding-top:24px;" layout="column" layout-align="center center">
-      <div layout="column" style="width:60%;">
+      <div layout="column" style="width:80%;">
         <md-input-container class="md-icon-float">
           <!-- Use floating label instead of placeholder -->
           <label>Usuario</label>
@@ -59,6 +59,10 @@
     <script src="./assets/js/users/Users.js"></script>
     <script src="./assets/js/users/UserController.js"></script>
     <script src="./assets/js/users/UserService.js"></script>
+
     <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/services/auth.js"></script>
+    <script src="./assets/js/services/storage.js"></script>
+    <script src="./assets/js/controllers/login.js"></script>
   </body>
 </html>

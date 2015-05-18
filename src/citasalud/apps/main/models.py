@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class PerfilUsuario(models.Model):
-    usuario = models.OneToOneField(User)
+    usuario = models.OneToOneField(User, related_name="profile", null=True, blank=True)
     activado = models.BooleanField("Usuario activado")
 
     dni = DNIField("DNI", unique=True)
@@ -41,25 +41,25 @@ class PerfilUsuario(models.Model):
     #     return True
 
 
-class PerfilPaciente(models.Model):
+class Paciente(models.Model):
     usuario = models.OneToOneField('PerfilUsuario')
     nss = PrimaryNumberField("NSS", digits=9)
 
     def __unicode__(self):
-        return "%s, %s (%s)" % (self.apellidos, self.nombre, self.nss)
+        return "%s (%s)" % (self.usuario.get_short_name(), self.nss)
 
     class Meta:
         verbose_name = "Paciente"
         verbose_name_plural = "Pacientes"
 
 
-class PerfilPersonal(models.Model):
+class Personal(models.Model):
     usuario = models.OneToOneField('PerfilUsuario')
     nregistropersonal = PrimaryNumberField("N° Registro personal")
     departamento = models.CharField("Departamento", max_length=32)
 
 
-class PerfilMedico(PerfilPersonal):
+class Medico(Personal):
     ncolegiado = PrimaryNumberField("N° Colegiado")
     especialidades = models.ManyToManyField("Especialidad", blank=True, related_name='especialidades')
 
@@ -68,7 +68,7 @@ class PerfilMedico(PerfilPersonal):
         return TIPO_MEDICO.ESPECIALISTA if self.especialidades else TIPO_MEDICO.GENERAL
 
     def __unicode__(self):
-        return "%s, %s (%s)" % (self.apellidos, self.nombre, self.ncolegiado)
+        return "%s (%s)" % (self.usuario.get_short_name(), self.ncolegiado)
 
     class Meta:
         verbose_name = "Médico"
@@ -78,7 +78,7 @@ class PerfilMedico(PerfilPersonal):
 
 class Especialidad(models.Model):
     id = models.CharField("ID Especialidad", max_length=5, primary_key=True)
-    nombre = models.CharField("Nombre", max_length=32)
+    nombre = models.CharField("Nombre", max_length=64)
 
     def __unicode__(self):
         return "%s - %s" % (self.id, self.nombre)
@@ -91,7 +91,7 @@ class Especialidad(models.Model):
 
 class CitaMedica(models.Model):
     historia = models.ForeignKey("HistoriaClinica")
-    medico = models.ForeignKey("PerfilMedico")
+    medico = models.ForeignKey("Medico")
     horario = models.DateTimeField("Hora de cita")
     asistio = models.BooleanField()
 
@@ -99,6 +99,6 @@ class CitaMedica(models.Model):
         verbose_name = u"Cita médica"
         verbose_name_plural = "Citas médicas"
 
-
+    
 class HistoriaClinica(models.Model):
-    paciente = models.OneToOneField("PerfilPaciente")
+    paciente = models.OneToOneField("Paciente")

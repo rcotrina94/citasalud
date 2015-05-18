@@ -1,50 +1,89 @@
-var app = require('app');  // Module to control application life.
-var ipc = require('ipc');
+/// <reference path="../../../../../typings/node/node.d.ts"/>
 
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var APP_DIR = 'file://' + __dirname;
-var STATIC_DIR = APP_DIR + '/static/';
+var app = require('app');  // Módulo para controlar la app.
+var ipc = require('ipc');  // Un intercomunicador del proceso principal (app.js) con el renderer
+// var dialog = require('dialog'); // Mostrar diálogos del Sistema.
+var BrowserWindow = require('browser-window'); // Módulo para crear ventanas
 
-// Report crashes to our server.
+var APP_DIR = 'file://' + __dirname; // Ruta base de la app.
+var STATIC_DIR = APP_DIR + '/static/'; // Ruta base de archivos estáticos.
+
+var Cache = (function(){ // Caché para almacenar datos compartidos entre ventanas de la app.
+	var data = {};
+	return {
+		save:  function(key, value){ data[key] = value; }, /// FIXME: Si existe, sobreescribe.
+		get: function(key){ return data[key]; }
+	};
+})();
+
+// Un proxy de los errores a Electron
 require('crash-reporter').start();
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the javascript object is GCed.
+// Referencia global al objeto Window, para evitar que la aplicación
+// sea cerrada por el GarbageCollection de Javascript.
 var mainWindow = null;
 
-// Quit when all windows are closed.
+// Cerrar la aplicación cuando todas las ventanas estén cerradas
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin'){
 		app.quit();
 	}
 });
 
-// This method will be called when Electron has done everything
-// initialization and ready for creating browser windows.
+// Éste método se llamará cuando Electron acabe su incialización
+// y esté listo para crear ventanas.
 app.on('ready', function() {
-	// Create the browser window.
-	mainWindow = new BrowserWindow({width: 640, height: 380, frame:false, show:false});
 	
-	// and load the index.html of the app.
-	mainWindow.loadUrl(STATIC_DIR + 'login.html');
+	var SCREEN = require('screen');
+	var APP_ICON_PATH = '/home/rc/webapps/citasalud/platforms/desktop/src/clients/admin/static/assets/img/icon.png';
+	var SCREEN_SIZE = SCREEN.getPrimaryDisplay().workAreaSize;
 	
-	mainWindow.webContents.on('did-finish-load', function() {
-		mainWindow.show();
-		mainWindow.webContents.send('ping', 'whoooooooh!');
+	var w_login_options = { // Opciones para la ventana de login.
+		width: 515,        // Ancho
+		height: 365,       // Alto
+		frame: false,      // Ventana sin borde
+		show: false,       // No mostrar ventana al crear.
+		resizable: false,  // No se podrá cambiar el tamaño.
+		icon:APP_ICON_PATH // Ícono de la ventana.
+	}
+	// Crear una ventana de navegador con las opciones w_login_options
+	mainWindow = new BrowserWindow(w_login_options);
+	mainWindow.loadUrl(STATIC_DIR + 'login.html'); // Carga login.html en la ventana.
+	mainWindow.webContents.on('did-finish-load', function() { 
+		mainWindow.show(); // Mostrar la ventana sólamente cuando se haya cargado login.html
 	});
 	
-	mainWindow.openDevTools();
-	
-	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
-		// Dereference the window object, usually you would store windows
-		// in an array if your app supports multi windows, this is the time
-		// when you should delete the corresponding element.
-		mainWindow = null;
+		mainWindow = null; // Al cerrar la ventana, vacía la referencia.
 	});
 	
-	ipc.on('window-evt', function(event, action) {
-		mainWindow[action]();
+	ipc.on('window-evt', function(event, action) { // Intercomunicador 
+		mainWindow[action](); // Al cerrar, maximizar o minimzar.
+	});
+	
+	ipc.on('login', function(event, authorized) { // Intercomunicador
+		if (authorized){ // Al iniciar sesión, si está autorizado
+			Cache.save('access_token', authorized);
+			mainWindow.close();
+			var delta = Number.parseInt(SCREEN_SIZE.height*0.2);
+			
+			var rec_s = {
+				width : SCREEN_SIZE.width - delta,
+				height : SCREEN_SIZE.height - delta
+			}
+//			rec_s.width = 1600;
+//			rec_s.height = 900;
+			rec_s.title = 'citaSalud - Administración';
+			rec_s.fullscreen = false;
+			console.log(SCREEN_SIZE);
+			console.log(rec_s);
+			mainWindow = new BrowserWindow(rec_s);		
+			
+		} else {
+			// Código para manejar cuando las credenciales son incorrectas.
+			/// OJO: Ya existe manejo de error en la ventana interna.
+			dialog.showErrorBox('xD', 'WHYYYYY');
+		}
 	});
 		
 });

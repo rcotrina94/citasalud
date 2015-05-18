@@ -1,35 +1,35 @@
 # coding=utf-8
 
 from rest_framework import serializers
-from citasalud.apps.main.models import PerfilMedico, Especialidad
+from citasalud.apps.main.models import PerfilUsuario, Medico, Especialidad
+from django.contrib.auth.models import User
 
 
-class DynamicFieldsModelSerializer(serializers.ModelSerializer):
-    """
-    A ModelSerializer that takes an additional `fields` argument that
-    controls which fields should be displayed.
-    """
-
-    def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
-        fields = kwargs.pop('fields', None)
-
-        # Instantiate the superclass normally
-        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
-
-        if fields is not None:
-            # Drop any fields that are not specified in the `fields` argument.
-            allowed = set(fields)
-            existing = set(self.fields.keys())
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
+class PerfilUsuarioSerializer(serializers.ModelSerializer):
+    """ Serializador para Perfil de Usuario """
+    
+    class Meta:
+        model = PerfilUsuario
 
 
-class MedicoSerializer(DynamicFieldsModelSerializer):
+class UsuarioSerializer(serializers.ModelSerializer):
+    profile = PerfilUsuarioSerializer()
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'profile', 'is_active')
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile')
+        user = User.objects.create(**validated_data)
+        Profile.objects.create(user=user, **profile_data)
+        return user
+
+class MedicoSerializer(serializers.ModelSerializer):
     """ Serializador para Médico """
 
     class Meta:
-        model = PerfilMedico
+        model = Medico
         # extra_kwargs = {'password': {'write_only': True}}
 
 
