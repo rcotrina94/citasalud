@@ -1,20 +1,14 @@
 app.factory('$storage', ['$window', function($window) {
   return {
-    set: function(key, value) {
-        $window.localStorage[key] = value;
+    set: function(name, value) {
+        messenger.send('disk-save', name, value);
     },
-    get: function(key, defaultValue) {
-        return $window.localStorage[key] || defaultValue;
+    get: function(name) {
+        return messenger.sendSync('disk-load', name);
     },
-    setObject: function(key, value) {
-        $window.localStorage[key] = JSON.stringify(value);
-    },
-    getObject: function(key) {
-        var obj = $window.localStorage[key]
-        return obj?JSON.parse(obj || '{}'):false;
-    },
-    clear: function(){
-        $window.localStorage.clear();
+    clear: function(key){
+        return messenger.send('disk-erase', key)
     }
+    
   };
 }]);

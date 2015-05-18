@@ -2,11 +2,16 @@
 
 var app = require('app');  // Módulo para controlar la app.
 var ipc = require('ipc');  // Un intercomunicador del proceso principal (app.js) con el renderer
-// var dialog = require('dialog'); // Mostrar diálogos del Sistema.
+var dialog = require('dialog'); // Mostrar diálogos del Sistema.
 var BrowserWindow = require('browser-window'); // Módulo para crear ventanas
 
-var APP_DIR = 'file://' + __dirname; // Ruta base de la app.
+var fs = require('fs'); // Módulo de Node para el filesystem 
+var path = require('path') // Módulo de Node para paths
+
+var BASE_DIR = __dirname;
+var APP_DIR = 'file://' + BASE_DIR; // Ruta base de la app.
 var STATIC_DIR = APP_DIR + '/static/'; // Ruta base de archivos estáticos.
+var DISK_DIR = path.join(BASE_DIR,'disk.json'); // Archivo para persistencia.
 
 var Cache = (function(){ // Caché para almacenar datos compartidos entre ventanas de la app.
 	var data = {};
@@ -14,6 +19,84 @@ var Cache = (function(){ // Caché para almacenar datos compartidos entre ventan
 		save:  function(key, value){ data[key] = value; }, /// FIXME: Si existe, sobreescribe.
 		get: function(key){ return data[key]; }
 	};
+})();
+
+
+var validJSON = function(text){
+	var valid = false;
+	if (/^[\],:{}\s]*$/.test(text.replace(/\\["\\\/bfnrtu]/g, '@').
+			replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+			replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+		valid = true;
+	}
+	return valid;
+}
+
+var Disk = (function(){ // Método para almacenar datos en el disco.
+	var load = function(key, callback){
+		fs.readFile(DISK_DIR, function(error, data){
+			if (error){
+				/// FIXME: Manejar error de lectura con Diálogos;
+				console.error(error);
+			}
+			var response = data.toString('utf-8');
+			if(!validJSON(response) && response){
+				console.log('INVALID JSON!')
+				return callback('');
+			}
+
+			response = JSON.parse(response);
+			if (!key){
+				return callback(response);
+			}
+			if (key in response) {
+				console.log(response);
+				return callback(response[key]);
+			} else {
+				return callback('');
+			}
+			
+		});
+	}
+	var save = function(key, value, callback){
+		load(null, function(file){
+			console.log(file);
+			file[key] = value;
+			console.log(file);			
+			fs.writeFile(DISK_DIR, JSON.stringify(file), 'utf-8', function(error){
+				if (error){
+					/// FIXME: Manejor error de escritura con Diálogos.
+					console.error(error)
+				}
+				console.log('Saved', key, 'on:', DISK_DIR)
+				return callback();
+			});
+		});
+		
+	};
+	
+	var erase = function(key){
+		load(null, function(file){
+			if (key in file){
+				delete file[key];
+			} else {
+				file = {}
+			}			
+			fs.writeFileSync(DISK_DIR, JSON.stringify(file), 'utf-8', function(error){
+				if (error){
+					/// FIXME: Manejor error de escritura con Diálogos.
+					console.error(error)
+				}
+				console.log('Erased', key, 'on:', DISK_DIR)
+			});
+		});
+	}
+	
+	return {
+		save : save,
+		load : load,
+		erase : erase
+	}
 })();
 
 // Un proxy de los errores a Electron
@@ -63,27 +146,41 @@ app.on('ready', function() {
 	
 	ipc.on('login', function(event, authorized) { // Intercomunicador
 		if (authorized){ // Al iniciar sesión, si está autorizado
-			Cache.save('access_token', authorized);
-			mainWindow.close();
-			var delta = Number.parseInt(SCREEN_SIZE.height*0.2);
+			Cache.save('access_token', authorized); // Guardar accessToken en caché
+			mainWindow.close(); // Cerrar la ventana
 			
+			var delta = Number.parseInt(SCREEN_SIZE.height*0.2);
 			var rec_s = {
 				width : SCREEN_SIZE.width - delta,
 				height : SCREEN_SIZE.height - delta
 			}
-//			rec_s.width = 1600;
-//			rec_s.height = 900;
+			
 			rec_s.title = 'citaSalud - Administración';
 			rec_s.fullscreen = false;
-			console.log(SCREEN_SIZE);
-			console.log(rec_s);
 			mainWindow = new BrowserWindow(rec_s);		
 			
 		} else {
 			// Código para manejar cuando las credenciales son incorrectas.
 			/// OJO: Ya existe manejo de error en la ventana interna.
-			dialog.showErrorBox('xD', 'WHYYYYY');
+			// dialog.showErrorBox('Título', 'Mensaje de error');
 		}
 	});
-		
+	
+	ipc.on('disk-save', function(event, key, data){
+		Disk.save(key, data, function(){
+			// Datos grabados
+		});
+	});
+	
+	ipc.on('disk-load', function(event, key){
+		Disk.load(key, function(data){
+			event.returnValue = data;
+		});
+	});
+	
+	ipc.on('disk-erase', function(event, key){
+		Disk.erase(key);
+	});
+	
+	
 });

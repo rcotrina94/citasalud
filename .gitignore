@@ -61,6 +61,7 @@ target/
 
 # SQLite 3 DB
 *.db
+*.sqlite3
 
 # Node.js modules
 platforms/desktop/src/clients/admin/static/assets/components
