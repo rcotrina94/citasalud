@@ -64,8 +64,13 @@ target/
 *.sqlite3
 
 # Node.js modules
+platforms/desktop/src/clients/admin/node_modules
 platforms/desktop/src/clients/admin/static/assets/components
 # platforms/desktop/src/clients/admin/static/assets/components
+
+# Electron builder
+platforms/desktop/src/clients/electron
+
 
 # Platform builds
 # platforms/desktop/dist

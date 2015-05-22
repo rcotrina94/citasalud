@@ -8,6 +8,10 @@
   },
   "author": "Richard Cotrina <rcotrina@pytel.pe>",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "asar": "^0.6.1",
+    "grunt": "^0.4.5",
+    "grunt-electron-installer": "^0.31.0"
+  },
   "dependencies": {}
 }

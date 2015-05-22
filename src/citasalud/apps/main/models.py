@@ -5,34 +5,26 @@ from .customfields import DNIField, PrimaryNumberField
 from django.contrib.auth.models import User
 
 
-class PerfilUsuario(models.Model):
+class Perfil(models.Model):
     usuario = models.OneToOneField(User, related_name="profile", null=True, blank=True)
-    activado = models.BooleanField("Usuario activado")
-
     dni = DNIField("DNI", unique=True)
-    nombre = models.CharField("Nombre", max_length=32)
-    apellido_paterno = models.CharField("Ap. Paterno", max_length=16)
-    apellido_materno = models.CharField("Ap. Materno", max_length=16)
-
     fecha_nacimiento = models.DateField("Fecha de Nacimiento")
     telefono = models.CharField("Teléfono", max_length=9, blank=True)
 
     ciudad = models.CharField("Ciudad de origen", max_length=128)
-
-    email = models.EmailField("E-mail", unique=True, blank=True)
     avatar = models.ImageField("Imagen", upload_to="avatar", null=False, default="/media/avatar/sin_imagen.png", blank=True)
 
-    def get_name(self):
-        return self.nombre.split(" ")[0]
-
-    def get_full_name(self):
-        return "%s %s %s" % (self.nombre, self.apellido_paterno, self.apellido_materno)
-
-    def get_short_name(self):
-        return "%s %s" % (self.get_name(), self.apellido_paterno)
-
+#    def get_name(self):
+#        return self.nombre.split(" ")[0]
+#
+#    def get_full_name(self):
+#        return "%s %s" % (self.usuario.first_name, self.usuario.last_name)
+#
+#    def get_short_name(self):
+#        return "%s %s" % (self.get_name(), self.apellido_paterno)
+#    
     def __unicode__(self):
-        return "[%s] %s" % (self.dni, self.get_full_name())
+        return "[%s] %s" % (self.dni, self.usuario.get_full_name())
 
     # def has_perm(self, perm, obj=None):
     #     return True
@@ -42,7 +34,7 @@ class PerfilUsuario(models.Model):
 
 
 class Paciente(models.Model):
-    usuario = models.OneToOneField('PerfilUsuario')
+    usuario = models.ForeignKey(User, unique=True, related_name="paciente")
     nss = PrimaryNumberField("NSS", digits=9)
 
     def __unicode__(self):
@@ -54,18 +46,21 @@ class Paciente(models.Model):
 
 
 class Personal(models.Model):
-    usuario = models.OneToOneField('PerfilUsuario')
+    usuario = models.ForeignKey(User, unique=True, related_name="personal")
     nregistropersonal = PrimaryNumberField("N° Registro personal")
     departamento = models.CharField("Departamento", max_length=32)
+    
+#    class Meta:
+#        proxy = True
 
 
 class Medico(Personal):
     ncolegiado = PrimaryNumberField("N° Colegiado")
     especialidades = models.ManyToManyField("Especialidad", blank=True, related_name='especialidades')
 
-    @property
-    def tipo(self):
+    def _tipo(self):
         return TIPO_MEDICO.ESPECIALISTA if self.especialidades else TIPO_MEDICO.GENERAL
+    tipo = property(_tipo)
 
     def __unicode__(self):
         return "%s (%s)" % (self.usuario.get_short_name(), self.ncolegiado)
@@ -101,4 +96,4 @@ class CitaMedica(models.Model):
 
     
 class HistoriaClinica(models.Model):
-    paciente = models.OneToOneField("Paciente")
+    paciente = models.ForeignKey("Paciente", unique=True)

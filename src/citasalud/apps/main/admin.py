@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from django.contrib import admin
-from .models import PerfilUsuario, Especialidad, CitaMedica, Medico, Paciente, Personal
+from .models import Perfil, Especialidad, CitaMedica, Medico, Paciente, Personal
 # from django.contrib.auth.admin import UserAdmin
 
 
@@ -12,7 +12,7 @@ from .models import PerfilUsuario, Especialidad, CitaMedica, Medico, Paciente, P
 #         (None, {'fields': ("dni", "nombre", "apellidos", "fecha_nacimiento", "telefono", "ciudad",)}),
 #     )
 #     ordering = []
-admin.site.register(PerfilUsuario)
+admin.site.register(Perfil)
 admin.site.register(Paciente)
 admin.site.register(Personal)
 admin.site.register(Medico)
