@@ -1,4 +1,5 @@
-# CitaSalud: Gestión de citas y diagnósticos
+# ![](https://rawgithub.com/rcotrina94/citasalud/master/docs/images/icon.png) CitaSalud: Gestión de citas y diagnósticos
+
 
 ## Descripción:
 CitaSalud, es un sistema de gestión de citas y diagnóstico. El proyecto se realiza en base a una tarea para el curso de Sistemas de Información I.
@@ -12,6 +13,8 @@ Consiste de un Sistema de Información Web para optimizacion de tiempos y costos
 > - Asmat Velásquez, Desiré
 > - Vasquez Muñoz, Brenda
 > - Polo Zavala, Nick
+
+![](https://rawgithub.com/rcotrina94/citasalud/master/docs/images/model.png)
 
 ## Arquitectura del SI
 El sistema consta de un servidor escrito en Python y su framework Django, y dos interfaces: Una interfaz web usada por los Pacientes, Doctores, Administradores, y una interfaz de escritorio que es usada por únicamente por Personal del Hospital (Administradores, Supervisores, Gerencia, Doctores, etc).
