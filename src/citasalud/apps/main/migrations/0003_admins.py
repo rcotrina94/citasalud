@@ -4,7 +4,7 @@ import os
 from django.core.management import call_command
 
 fixture_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../fixtures'))
-fixture_filename = 'initial_data.json'
+fixture_filename = 'admins.json'
 
 
 def load_fixture(apps, schema_editor):
@@ -15,14 +15,14 @@ def load_fixture(apps, schema_editor):
 def unload_fixture(apps, schema_editor):
     "Brutally deleting all entries for this model..."
 
-    MyModel = apps.get_model("citasalud", "Especialidad")
+    MyModel = apps.get_model("citasalud", "Usuario")
     MyModel.objects.all().delete()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0001_initial'),
+        ('main', '0002_especialidades'),
     ]
 
     operations = [

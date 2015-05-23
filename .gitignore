@@ -59,9 +59,10 @@ target/
 # Visual Studio Code Settings
 .settings/
 
-# SQLite 3 DB
+# SQLite 3 DB & MySQL Backups
 *.db
 *.sqlite3
+*.mwb.bak
 
 # Node.js modules
 platforms/desktop/src/clients/admin/node_modules
