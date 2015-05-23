@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'citasalud.apps.main',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
