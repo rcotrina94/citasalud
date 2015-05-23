@@ -22,7 +22,9 @@ El sistema consta de un servidor escrito en Python y su framework Django, y dos 
 ### Backend
 - **Aplicación Web:** Django(Python)
 	- **API REST:** Django REST Framework
+	
 - **Motor de Base de Datos:** SQLite / MySQL / PostgreSQL
+
 - **Servidor de Aplicaciones:** Nginx / Apache
 
 ### Frontend
