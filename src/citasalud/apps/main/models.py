@@ -6,35 +6,37 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UsuarioManager(BaseUserManager):
-    def create_user(self, dni,fecha_nacimiento, first_name,last_name,password =None):
+    def create_user(self, username, dni, fecha_nacimiento, first_name,last_name,password =None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
         """
         if not dni:
-            raise ValueError('EL USUARIO DEBE TENER DNI')
+            raise ValueError('Ingrese un n° DNI válido.')
 
         user = self.model(
-             dni=dni,
-             first_name=first_name,
-             last_name=last_name,
-             fecha_nacimiento=fecha_nacimiento
+            username=username,
+            dni=dni,
+            first_name=first_name,
+            last_name=last_name,
+            fecha_nacimiento=fecha_nacimiento
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, dni,fecha_nacimiento, first_name,last_name,password):
+    def create_superuser(self,username,dni,fecha_nacimiento, first_name,last_name,password):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
-        user = self.create_user(dni,
+        user = self.create_user(username,
+            dni=dni,
             password=password,
-             first_name=first_name,
-             last_name=last_name,
-             fecha_nacimiento=fecha_nacimiento
+            first_name=first_name,
+            last_name=last_name,
+            fecha_nacimiento=fecha_nacimiento
         )
         user.is_active = True
         user.is_superuser = True
@@ -45,7 +47,7 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     dni = DNIField("DNI", unique=True , primary_key= True)
-    username = models.CharField("Username", max_length=16)
+    username = models.CharField("Nombre de usuario", max_length=16, unique=True)
     first_name = models.CharField("Nombre", max_length=32)
     last_name = models.CharField("Ap. Paterno", max_length=16)
     apellido_materno = models.CharField("Ap. Materno", max_length=16)
@@ -62,8 +64,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default = False)
     objects = UsuarioManager()
     
-    USERNAME_FIELD= 'dni'
-    REQUIRED_FIELDS = [ 'fecha_nacimiento','first_name' ,'last_name' ]
+    USERNAME_FIELD= 'username'
+    REQUIRED_FIELDS = ['dni', 'fecha_nacimiento','first_name' ,'last_name' ]
 
     def get_name(self):
         return self.first_name.split(" ")[0]
