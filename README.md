@@ -36,16 +36,16 @@ El sistema consta de un servidor escrito en Python y su framework Django, y dos 
 ### Entorno de desarrollo
 
 Se deben instalar los siguientes requerimientos:
-```
-	Django==1.8
-	django-extensions==1.5.5
-	django-localflavor==1.1
-	djangorestframework==3.1.1
-	Markdown==2.6.2
-	MySQL-python==1.2.5
-	Pillow==2.8.1
-	pygraphviz==1.2
-	six==1.9.0
+```js
+Django==1.8
+django-extensions==1.5.5
+django-localflavor==1.1
+djangorestframework==3.1.1
+Markdown==2.6.2
+MySQL-python==1.2.5
+Pillow==2.8.1
+pygraphviz==1.2
+six==1.9.0
 ```
 
 ### Producción
@@ -53,3 +53,5 @@ Se deben instalar los siguientes requerimientos:
 
 ## Capturas
 ![](https://raw.github.com/rcotrina94/citasalud/master/docs/images/001.png)
+![](https://raw.github.com/rcotrina94/citasalud/master/docs/images/002.png)
+![](https://raw.github.com/rcotrina94/citasalud/master/docs/images/003.png)
