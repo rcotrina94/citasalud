@@ -1,15 +1,7 @@
 # coding=utf-8
 
 from rest_framework import serializers
-from citasalud.apps.main.models import Perfil, Medico, Especialidad
-from django.contrib.auth.models import User
-
-
-class PerfilUsuarioSerializer(serializers.ModelSerializer):
-    """ Serializador para Perfil de Usuario """
-    
-    class Meta:
-        model = Perfil
+from citasalud.apps.main.models import Usuario, Medico, Especialidad
 
 
 class MedicoSerializer(serializers.ModelSerializer):
@@ -20,10 +12,9 @@ class MedicoSerializer(serializers.ModelSerializer):
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    profile = PerfilUsuarioSerializer()
     
     class Meta:
-        model = User
+        model = Usuario
 #        fields = ('id', 'username', 'profile','is_superuser')
 
     def create(self, validated_data):

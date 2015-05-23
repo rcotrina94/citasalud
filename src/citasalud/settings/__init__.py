@@ -56,7 +56,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'citasalud.urls'
 
-AUTH_PROFILE_MODULE = 'main.PerfilUsuario'
+AUTH_USER_MODEL = 'main.Usuario'
 
 TEMPLATES = [
     {
