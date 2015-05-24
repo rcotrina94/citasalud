@@ -1,5 +1,5 @@
 app.factory('Auth', function($http, $q, $window, $storage){
-	var getTokenURL = 'http://localhost:8000/api-auth-token/';
+	var getTokenURL = 'http://localhost:8000/api/auth/token/';
 	var accessToken;
 
 	var doLogin = function(loginData){

@@ -9,7 +9,7 @@ fixture_filename = 'admins.json'
 
 def load_fixture(apps, schema_editor):
     fixture_file = os.path.join(fixture_dir, fixture_filename)
-    call_command('loaddata', fixture_file)
+#    call_command('loaddata', fixture_file)
 
 
 def unload_fixture(apps, schema_editor):

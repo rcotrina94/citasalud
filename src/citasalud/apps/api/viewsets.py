@@ -1,5 +1,5 @@
-from ..main.models import Medico, Especialidad, Usuario
-from .serializers import UsuarioSerializer, MedicoSerializer, EspecialidadSerializer
+from ..main.models import Medico, Especialidad, Usuario, Empleado
+from .serializers import UsuarioSerializer, MedicoSerializer, EspecialidadSerializer, EmpleadoSerializer
 from rest_framework import viewsets
 
 
@@ -16,3 +16,10 @@ class MedicoViewSet(viewsets.ModelViewSet):
 class EspecialidadViewSet(viewsets.ModelViewSet):
     serializer_class = EspecialidadSerializer
     queryset = Especialidad.objects.all()
+
+
+class EmpleadoViewSet(viewsets.ModelViewSet):
+    serializer_class = EmpleadoSerializer
+    queryset = Empleado.objects.all()
+    
+    

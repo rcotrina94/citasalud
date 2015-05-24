@@ -30,7 +30,7 @@ var validJSON = function(text){
 		valid = true;
 	}
 	return valid;
-}
+};
 
 var Disk = (function(){ // Método para almacenar datos en el disco.
 	var load = function(key, callback){
@@ -41,7 +41,7 @@ var Disk = (function(){ // Método para almacenar datos en el disco.
 			}
 			var response = data.toString('utf-8');
 			if(!validJSON(response) && response){
-				console.log('INVALID JSON!')
+				console.log('INVALID JSON!');
 				return callback('');
 			}
 
@@ -57,7 +57,7 @@ var Disk = (function(){ // Método para almacenar datos en el disco.
 			}
 			
 		});
-	}
+	};
 	var save = function(key, value, callback){
 		load(null, function(file){
 			console.log(file);
@@ -66,9 +66,9 @@ var Disk = (function(){ // Método para almacenar datos en el disco.
 			fs.writeFile(DISK_DIR, JSON.stringify(file), 'utf-8', function(error){
 				if (error){
 					/// FIXME: Manejor error de escritura con Diálogos.
-					console.error(error)
+					console.error(error);
 				}
-				console.log('Saved', key, 'on:', DISK_DIR)
+				console.log('Saved', key, 'on:', DISK_DIR);
 				return callback();
 			});
 		});
@@ -80,23 +80,23 @@ var Disk = (function(){ // Método para almacenar datos en el disco.
 			if (key in file){
 				delete file[key];
 			} else {
-				file = {}
+				file = {};
 			}			
 			fs.writeFileSync(DISK_DIR, JSON.stringify(file), 'utf-8', function(error){
 				if (error){
 					/// FIXME: Manejor error de escritura con Diálogos.
-					console.error(error)
+					console.error(error);
 				}
-				console.log('Erased', key, 'on:', DISK_DIR)
+				console.log('Erased', key, 'on:', DISK_DIR);
 			});
 		});
-	}
+	};
 	
 	return {
 		save : save,
 		load : load,
 		erase : erase
-	}
+	};
 })();
 
 // Un proxy de los errores a Electron
@@ -121,20 +121,25 @@ app.on('ready', function() {
 	var APP_ICON_PATH = '/home/rc/webapps/citasalud/platforms/desktop/src/clients/admin/static/assets/img/icon.png';
 	var SCREEN_SIZE = SCREEN.getPrimaryDisplay().workAreaSize;
 	
-	var w_login_options = { // Opciones para la ventana de login.
+	var w_login_options = {// Opciones para la ventana de login.
 		width: 515,        // Ancho
 		height: 365,       // Alto
 		frame: false,      // Ventana sin borde
 		show: false,       // No mostrar ventana al crear.
 		resizable: false,  // No se podrá cambiar el tamaño.
 		icon:APP_ICON_PATH // Ícono de la ventana.
-	}
+	};
 	// Crear una ventana de navegador con las opciones w_login_options
 	mainWindow = new BrowserWindow(w_login_options);
 	mainWindow.loadUrl(STATIC_DIR + 'login.html'); // Carga login.html en la ventana.
-	mainWindow.webContents.on('did-finish-load', function() { 
-		mainWindow.show(); // Mostrar la ventana sólamente cuando se haya cargado login.html
-	});
+	function show(mw){
+		mw.webContents.on('did-finish-load', function() { 
+			mw.show(); // Mostrar la ventana sólamente cuando se haya cargado login.html
+			console.log("Mostrando ventana");
+		});
+	};
+	show(mainWindow);
+
 	
 	mainWindow.on('closed', function() {
 		mainWindow = null; // Al cerrar la ventana, vacía la referencia.
@@ -152,12 +157,16 @@ app.on('ready', function() {
 			var delta = Number.parseInt(SCREEN_SIZE.height*0.2);
 			var rec_s = {
 				width : SCREEN_SIZE.width - delta,
-				height : SCREEN_SIZE.height - delta
-			}
+				height : SCREEN_SIZE.height - delta,
+				icon: APP_ICON_PATH,
+				show: false
+			};
 			
 			rec_s.title = 'citaSalud - Administración';
 			rec_s.fullscreen = false;
-			mainWindow = new BrowserWindow(rec_s);		
+			mainWindow = new BrowserWindow(rec_s);
+			mainWindow.loadUrl("http://dev:8000/api");
+			show(mainWindow);		
 			
 		} else {
 			// Código para manejar cuando las credenciales son incorrectas.

@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.db import models
-from .constants import TIPO_MEDICO
+from .constants import TIPO_MEDICO_ESPECIALISTA, TIPO_MEDICO_GENERAL
 from .customfields import DNIField, PrimaryNumberField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -45,7 +45,7 @@ class UsuarioManager(BaseUserManager):
 class Usuario(AbstractBaseUser, PermissionsMixin):
     dni = DNIField("DNI", unique=True, primary_key=True)
     username = models.CharField("Nombre de usuario", max_length=16, unique=True)
-    first_name = models.CharField("Nombre", max_length=32)
+    first_name = models.CharField("Nombres", max_length=32)
     last_name = models.CharField("Ap. Paterno", max_length=16)
     apellido_materno = models.CharField("Ap. Materno", max_length=16)
 
@@ -54,7 +54,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     ciudad = models.CharField("Ciudad de origen", max_length=128)
 
-    email = models.EmailField("E-mail", unique=True, blank=True)
+    email = models.EmailField("E-mail", unique=True, blank=True, null=True)
     avatar = models.ImageField("Imagen", upload_to="avatar", null=False, default="/media/avatar/sin_imagen.png", blank=True)
 
     is_active = models.BooleanField(default=False)
@@ -64,6 +64,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['dni', 'fecha_nacimiento', 'first_name', 'last_name']
 
+    @property
+    def nombre(self):
+        return self.get_short_name()
+    @property
+    def nombre_completo(self):
+        return self.get_full_name()
+
     def get_name(self):
         return self.first_name.split(" ")[0]
 
@@ -72,9 +79,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return "%s %s" % (self.get_name(), self.last_name)
-
-    def __unicode__(self):
-        return "[%s] %s" % (self.dni, self.get_full_name())
+#
+#    def __unicode__(self):
+#        return self
 
 
 class Empleado(models.Model):
@@ -82,16 +89,37 @@ class Empleado(models.Model):
     nregistropersonal = PrimaryNumberField("N° Registro de Personal")
     departamento = models.CharField("Departamento", max_length=32)
     cargo = models.CharField("Cargo", max_length=32)
-    superior = models.ForeignKey('Empleado', related_name="jefe")
+    superior = models.ForeignKey('Empleado', related_name="jefe", null=True, blank=True)
+
+    @property
+    def nombre(self):
+        return self.usuario.nombre
+
+    @property
+    def contacto(self):
+        return self._get_contact_info()
+
+    def _get_contact_info(self):
+        return {
+            'telefono':self.usuario.telefono,
+            'email':self.usuario.email
+        }
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.nregistropersonal, self.nombre)
+
+    class Meta:
+        verbose_name = "Empleado"
+        verbose_name_plural = "Empleados"
 
 
 class Medico(Empleado):
     ncolegiado = models.PositiveIntegerField("N° Colegiado")
     especialidades = models.ManyToManyField("Especialidad", blank=True, related_name='especialidades')
 
-    def _tipo(self):
-        return TIPO_MEDICO.ESPECIALISTA if self.especialidades else TIPO_MEDICO.GENERAL
-    tipo = property(_tipo)
+    @property
+    def tipo(self):
+        return TIPO_MEDICO_ESPECIALISTA if self.especialidades.count() else TIPO_MEDICO_GENERAL
 
     def __unicode__(self):
         return "%s (%s)" % (self.usuario.get_short_name(), self.ncolegiado)

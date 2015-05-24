@@ -4,7 +4,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from citasalud.apps.api.viewsets import MedicoViewSet, EspecialidadViewSet, UsuarioViewSet
+from citasalud.apps.api.viewsets import MedicoViewSet, EspecialidadViewSet, UsuarioViewSet, EmpleadoViewSet
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
@@ -16,7 +16,7 @@ router = DefaultRouter()
 router.register(r'medicos', MedicoViewSet)
 router.register(r'especialidades', EspecialidadViewSet)
 router.register(r'usuarios', UsuarioViewSet)
-
+router.register(r'empleados', EmpleadoViewSet)
 
 urlpatterns = [
     # Examples:

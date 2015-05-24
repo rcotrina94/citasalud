@@ -72,7 +72,14 @@ platforms/desktop/src/clients/admin/static/assets/components
 # Electron builder
 platforms/desktop/src/clients/electron
 
-
 # Platform builds
 # platforms/desktop/dist
 # platforms/mobiles/dist
+
+# Backups and Saves
+*.backup
+*.bak
+*.save
+
+# Disk.json
+disk.json

@@ -1,9 +1,5 @@
 # coding=utf-8
 
 # MEDICOS
-
-GENERAL, ESPECIALISTA = range(2)
-TIPO_MEDICO = (
-    (GENERAL, 'General'),
-    (ESPECIALISTA, 'ESpecialista')
-)
+TIPO_MEDICO_GENERAL = u'General'
+TIPO_MEDICO_ESPECIALISTA = u'Especialista'
