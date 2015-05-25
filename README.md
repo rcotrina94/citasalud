@@ -36,8 +36,8 @@ El sistema consta de un servidor escrito en Python y su framework Django, y dos 
 	- **Diseño:** Material Design (Angular Material Design) 
 	- **Programación:** AngularJS+io.js (Javascript)
 		
-## Implementación
-[](http://i.imgur.com/Wuuw4N9.gifv)
+## [Implementación](http://i.imgur.com/Wuuw4N9.gifv)
+
 
 ### Entorno de desarrollo
 
