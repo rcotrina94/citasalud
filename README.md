@@ -37,6 +37,7 @@ El sistema consta de un servidor escrito en Python y su framework Django, y dos 
 	- **Programación:** AngularJS+io.js (Javascript)
 		
 ## Implementación
+![](http://i.imgur.com/Wuuw4N9.gif)
 
 ### Entorno de desarrollo
 
